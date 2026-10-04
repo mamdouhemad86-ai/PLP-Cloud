@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20261004-2315">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=20261004-2315">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20261004-2315">
-<link rel="manifest" href="manifest.webmanifest?v=20261004-2315">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20261004-2330">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=20261004-2330">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20261004-2330">
+<link rel="manifest" href="manifest.webmanifest?v=20261004-2330">
 <meta name="theme-color" content="#0b1f3a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="PLP Cloud">
-<title>PLP Cloud - Phone LCD Parts ERP System</title>
+<meta name="plp-build" content="20261004-2330-V5"><title>PLP Cloud - Phone LCD Parts ERP System</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--nav:#0b1f3a;--nav2:#12345b;--blue:#1769e0;--bg:#f4f7fb;--card:#fff;--line:#e4eaf2;--muted:#667085;--text:#172033;--ok:#12b76a;--warn:#f79009;--bad:#f04438;--cyan:#06b6d4}
@@ -42,30 +42,34 @@ async function login(){
  const e=document.getElementById('email').value.trim(),p=document.getElementById('password').value;
  const m=document.getElementById('loginmsg');
  if(!e||!p){m.textContent='من فضلك أدخل البريد الإلكتروني وكلمة المرور';return}
- m.textContent='جارٍ تسجيل الدخول...';
+ let seconds=15;
+ m.textContent='جارٍ تسجيل الدخول... 15';
+ const countdown=setInterval(()=>{seconds--;if(seconds>0)m.textContent='جارٍ تسجيل الدخول... '+seconds;},1000);
  try{
    const authCall=sb.auth.signInWithPassword({email:e,password:p});
-   const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('انتهت مهلة تسجيل الدخول. تحقق من الاتصال ثم حاول مرة أخرى.')),15000));
+   const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('انتهت مهلة تسجيل الدخول. تحقق من اتصال الإنترنت ثم حاول مرة أخرى.')),15000));
    const result=await Promise.race([authCall,timer]);
+   clearInterval(countdown);
    if(result.error){m.textContent=result.error.message;return}
-   await boot();
- }catch(err){m.textContent=err?.message||'تعذر تسجيل الدخول';}
+   const session=result.data?.session||null;
+   if(!session){m.textContent='تم تسجيل الدخول لكن لم يتم استلام جلسة صالحة.';return}
+   await boot(session);
+ }catch(err){clearInterval(countdown);m.textContent=err?.message||'تعذر تسجيل الدخول';}
 }
 async function logout(){await sb.auth.signOut();ctx=null;dash=null;companyId=null;renderLogin()}
 function getCompanyId(){return companyId || ctx?.company?.id || ctx?.company_id || null}
-async function boot(){
- let session=null;
- try{
-   const sessionCall=sb.auth.getSession();
-   const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('انتهت مهلة الاتصال بخدمة المصادقة.')),10000));
-   const result=await Promise.race([sessionCall,timer]);
-   if(result.error)throw result.error;
-   session=result.data?.session||null;
- }catch(e){
-   const m=document.getElementById('loginmsg');
-   if(m)m.textContent=e?.message||'تعذر التحقق من جلسة الدخول';
-   else renderLogin();
-   return;
+async function boot(session=null){
+ if(!session){
+   try{
+     const {data,error}=await sb.auth.getSession();
+     if(error)throw error;
+     session=data?.session||null;
+   }catch(e){
+     const m=document.getElementById('loginmsg');
+     if(m)m.textContent=e?.message||'تعذر التحقق من جلسة الدخول';
+     else renderLogin();
+     return;
+   }
  }
  if(!session){renderLogin();return}
  try{
