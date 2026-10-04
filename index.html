@@ -11,7 +11,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="PLP Cloud">
-<meta name="plp-build" content="20261004-2330-V5"><title>PLP Cloud - Phone LCD Parts ERP System</title>
+<meta name="plp-build" content="20261004-2331-V7"><title>PLP Cloud - Phone LCD Parts ERP System</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--nav:#0b1f3a;--nav2:#12345b;--blue:#1769e0;--bg:#f4f7fb;--card:#fff;--line:#e4eaf2;--muted:#667085;--text:#172033;--ok:#12b76a;--warn:#f79009;--bad:#f04438;--cyan:#06b6d4}
@@ -24,6 +24,11 @@
 <body>
 <div id="app"></div>
 <script>
+// PLP Cloud build V7: force a fresh document when an older cached Home Screen/Safari document is used.
+if(!location.search.includes('plpbuild=20261004-V7')){
+  const u=new URL(location.href); u.searchParams.set('plpbuild','20261004-V7'); location.replace(u.toString());
+}
+
 const SUPABASE_URL='https://vgstkvshalbywbposzzl.supabase.co';
 const SUPABASE_KEY='sb_publishable_kpEPqbZEuVY4DukfDE0jWg_mTqtIFpa';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
@@ -36,11 +41,11 @@ const val=(o,...ks)=>{for(const k of ks){if(o&&o[k]!==undefined&&o[k]!==null)ret
 async function rpc(name,args={},timeoutMs=15000){const call=sb.rpc(name,args);const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('انتهت مهلة الاتصال بالخادم')),timeoutMs));const {data,error}=await Promise.race([call,timer]);if(error)throw error;return data}
 function toast(msg,ok=false){const x=document.createElement('div');x.style='position:fixed;bottom:18px;left:18px;z-index:100;background:'+(ok?'#067647':'#b42318')+';color:#fff;padding:12px 16px;border-radius:10px;font-size:12px;box-shadow:0 8px 30px #0003';x.textContent=msg;document.body.appendChild(x);setTimeout(()=>x.remove(),3500)}
 function renderLogin(){
- document.body.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h1 style="margin:0 0 5px">PLP Cloud</h1><div class="muted" style="font-size:12px">Phone LCD Parts ERP System</div><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div><div id="loginmsg" class="loginmsg"></div><button class="btn primary" style="width:100%" onclick="login()">دخول للنظام</button><div class="footer">Arabic RTL • English LTR • Supabase secured backend</div></div></div>';
+ const root=document.getElementById('app')||document.body; root.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h1 style="margin:0 0 5px">PLP Cloud</h1><div class="muted" style="font-size:12px">Phone LCD Parts ERP System</div><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div><div id="loginmsg" class="loginmsg"></div><button class="btn primary" style="width:100%" onclick="login()">دخول للنظام</button><div class="footer">Arabic RTL • English LTR • PLP Cloud V7 • Supabase secured backend</div></div></div>';
 }
 function showBootError(err){
  const msg=esc(err?.message||err||'حدث خطأ غير معروف');
- document.body.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h2 style="margin:0 0 10px">تعذر تحميل النظام</h2><p>'+msg+'</p><button class="btn primary" onclick="boot()">إعادة المحاولة</button><button class="btn" style="margin-inline-start:8px" onclick="logout()">خروج</button></div></div>';
+ const root=document.getElementById('app')||document.body; root.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h2 style="margin:0 0 10px">تعذر تحميل النظام</h2><p>'+msg+'</p><button class="btn primary" onclick="boot()">إعادة المحاولة</button><button class="btn" style="margin-inline-start:8px" onclick="logout()">خروج</button></div></div>';
 }
 function setLoginMessage(msg){const m=document.getElementById('loginmsg');if(m)m.textContent=msg;else{const el=document.createElement('div');el.className='loginmsg';el.textContent=msg;document.body.appendChild(el)}}
 async function login(){
@@ -86,7 +91,7 @@ async function boot(session=null){
  }catch(e){showBootError(e)}
 }
 function renderShell(){
- document.body.innerHTML='<aside class="side"><div class="brand"><div class="logo">PLP</div><div><b>PLP Cloud</b><small>Phone LCD Parts ERP</small></div></div><div class="nav">'+nav('dashboard','📊','الرئيسية')+nav('sales','🧾','المبيعات')+nav('purchases','🛒','المشتريات والاستيراد')+nav('inventory','📦','المخزون')+nav('treasury','💰','الخزينة والبنوك')+nav('customers','👥','العملاء والموردين')+nav('employees','🧑‍💼','الموظفون والمرتبات')+nav('assets','🏢','الأصول الثابتة')+nav('accounting','📚','المحاسبة')+nav('reports','📈','التقارير')+nav('settings','⚙️','الإعدادات')+'</div></aside><main class="main"><div id="page"></div></main><div id="modal" class="modal hidden"></div>';
+ const root=document.getElementById('app')||document.body; root.innerHTML='<aside class="side"><div class="brand"><div class="logo">PLP</div><div><b>PLP Cloud</b><small>Phone LCD Parts ERP</small></div></div><div class="nav">'+nav('dashboard','📊','الرئيسية')+nav('sales','🧾','المبيعات')+nav('purchases','🛒','المشتريات والاستيراد')+nav('inventory','📦','المخزون')+nav('treasury','💰','الخزينة والبنوك')+nav('customers','👥','العملاء والموردين')+nav('employees','🧑‍💼','الموظفون والمرتبات')+nav('assets','🏢','الأصول الثابتة')+nav('accounting','📚','المحاسبة')+nav('reports','📈','التقارير')+nav('settings','⚙️','الإعدادات')+'</div></aside><main class="main"><div id="page"></div></main><div id="modal" class="modal hidden"></div>';
 }
 function nav(id,ico,label){return '<button id="nav-'+id+'" onclick="showPage(\''+id+'\')"><span class="ico">'+ico+'</span>'+label+'</button>'}
 function header(title,sub){return '<div class="top"><div><h1>'+title+'</h1><p>'+sub+'</p></div><div class="actions"><div class="user-pill">'+esc(ctx.full_name||ctx.email||'مستخدم')+'</div><button class="btn" onclick="refresh()">↻ تحديث</button><button class="btn danger" onclick="logout()">خروج</button></div></div>'}
