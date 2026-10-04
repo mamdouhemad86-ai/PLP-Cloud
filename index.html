@@ -38,6 +38,11 @@ function toast(msg,ok=false){const x=document.createElement('div');x.style='posi
 function renderLogin(){
  document.body.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h1 style="margin:0 0 5px">PLP Cloud</h1><div class="muted" style="font-size:12px">Phone LCD Parts ERP System</div><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div><div id="loginmsg" class="loginmsg"></div><button class="btn primary" style="width:100%" onclick="login()">دخول للنظام</button><div class="footer">Arabic RTL • English LTR • Supabase secured backend</div></div></div>';
 }
+function showBootError(err){
+ const msg=esc(err?.message||err||'حدث خطأ غير معروف');
+ document.body.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h2 style="margin:0 0 10px">تعذر تحميل النظام</h2><p>'+msg+'</p><button class="btn primary" onclick="boot()">إعادة المحاولة</button><button class="btn" style="margin-inline-start:8px" onclick="logout()">خروج</button></div></div>';
+}
+function setLoginMessage(msg){const m=document.getElementById('loginmsg');if(m)m.textContent=msg;else{const el=document.createElement('div');el.className='loginmsg';el.textContent=msg;document.body.appendChild(el)}}
 async function login(){
  const e=document.getElementById('email').value.trim(),p=document.getElementById('password').value;
  const m=document.getElementById('loginmsg');
@@ -74,11 +79,11 @@ async function boot(session=null){
  if(!session){renderLogin();return}
  try{
    dash=await rpc('get_dashboard_context',{});
-   if(!dash || !dash.has_company || !dash.company_id){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>لا توجد شركة مرتبطة</h2><p class="muted">حسابك يحتاج أن يكون عضوًا في شركة PLP.</p><button class="btn" onclick="logout()">تسجيل الخروج</button></div></div>';return}
+   if(!dash || !dash.has_company || !dash.company_id){showBootError(new Error('حسابك لا يحتوي على شركة PLP مرتبطة.'));return}
    companyId=dash.company_id;
    ctx={user_id:dash.user_id,company_id:companyId,email:session.user?.email||'',full_name:session.user?.user_metadata?.full_name||session.user?.email||'مستخدم',company:{id:companyId}};
    renderShell();showPage('dashboard');
- }catch(e){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>تعذر تحميل النظام</h2><p>'+esc(e.message)+'</p><button class="btn" onclick="boot()">إعادة المحاولة</button><button class="btn" onclick="logout()">خروج</button></div></div>'}
+ }catch(e){showBootError(e)}
 }
 function renderShell(){
  document.body.innerHTML='<aside class="side"><div class="brand"><div class="logo">PLP</div><div><b>PLP Cloud</b><small>Phone LCD Parts ERP</small></div></div><div class="nav">'+nav('dashboard','📊','الرئيسية')+nav('sales','🧾','المبيعات')+nav('purchases','🛒','المشتريات والاستيراد')+nav('inventory','📦','المخزون')+nav('treasury','💰','الخزينة والبنوك')+nav('customers','👥','العملاء والموردين')+nav('employees','🧑‍💼','الموظفون والمرتبات')+nav('assets','🏢','الأصول الثابتة')+nav('accounting','📚','المحاسبة')+nav('reports','📈','التقارير')+nav('settings','⚙️','الإعدادات')+'</div></aside><main class="main"><div id="page"></div></main><div id="modal" class="modal hidden"></div>';
