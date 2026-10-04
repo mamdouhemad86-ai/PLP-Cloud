@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b1f3a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PLP Cloud">
+<title>PLP Cloud - Phone LCD Parts ERP System</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--nav:#0b1f3a;--nav2:#12345b;--blue:#1769e0;--bg:#f4f7fb;--card:#fff;--line:#e4eaf2;--muted:#667085;--text:#172033;--ok:#12b76a;--warn:#f79009;--bad:#f04438;--cyan:#06b6d4}
+*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}
+.side{position:fixed;right:0;top:0;bottom:0;width:260px;background:linear-gradient(180deg,var(--nav),#07172b);color:#fff;padding:15px 12px;overflow:auto;z-index:10}.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;border-bottom:1px solid #ffffff18;margin-bottom:10px}.logo{width:42px;height:42px;border-radius:12px;background:#fff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:19px}.brand b{font-size:19px}.brand small{display:block;color:#b8c7da;font-size:10px;margin-top:3px}.group{font-size:10px;color:#91a4bd;margin:15px 10px 5px}.nav button{width:100%;border:0;background:transparent;color:#d7e0ec;text-align:right;padding:10px 12px;border-radius:9px;margin:2px 0;cursor:pointer}.nav button:hover,.nav button.active{background:#ffffff12;color:#fff}.nav button .ico{display:inline-block;width:25px}.main{margin-right:260px;padding:20px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.top h1{margin:0;font-size:24px}.top p{margin:4px 0;color:var(--muted);font-size:12px}.actions{display:flex;gap:7px;align-items:center}.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 12px;cursor:pointer;font-weight:700}.primary{background:var(--blue);border-color:var(--blue);color:#fff}.danger{color:#b42318}.user-pill{background:#fff;border:1px solid var(--line);padding:8px 10px;border-radius:10px;font-size:11px}.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:11px}.card,.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px}.label{font-size:11px;color:var(--muted)}.num{font-size:22px;font-weight:800;margin-top:7px}.sub{font-size:10px;color:var(--muted);margin-top:5px}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:13px;margin-top:13px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:13px}.page.hidden{display:none}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:11px}.search{flex:1;min-width:220px;padding:9px;border:1px solid var(--line);border-radius:9px}.tablewrap{overflow:auto;max-height:570px;border:1px solid var(--line);border-radius:10px}.table{border-collapse:collapse;width:100%;font-size:11px}.table th,.table td{padding:9px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}.table th{background:#f8fafc;position:sticky;top:0}.tag{padding:4px 8px;border-radius:99px;font-size:10px;background:#eef4ff;color:#175cd3}.tag.ok{background:#ecfdf3;color:#067647}.tag.warn{background:#fffaeb;color:#b54708}.tag.bad{background:#fef3f2;color:#b42318}.alert{padding:10px;border:1px solid #fedf89;background:#fffaeb;border-radius:10px;margin:7px 0;font-size:12px}.alert.ok{background:#ecfdf3;border-color:#abefc6}.empty{text-align:center;color:var(--muted);padding:28px}.metric{display:flex;justify-content:space-between;align-items:center;gap:10px}.metric .circle{width:42px;height:42px;border-radius:12px;background:#eef4ff;color:var(--blue);display:grid;place-items:center;font-weight:900}.status{font-size:11px}.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at top,#eaf3ff,#f5f7fb 55%)}.loginbox{width:min(430px,100%);background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 20px 60px #0b1f3a16}.loginlogo{width:58px;height:58px;border-radius:16px;background:var(--nav);color:#fff;display:grid;place-items:center;font-weight:900;font-size:25px;margin-bottom:12px}.field{margin:10px 0}.field label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;outline:none}.field input:focus{border-color:#84adf2}.loginmsg{min-height:20px;color:var(--bad);font-size:11px;margin:8px 0}.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.hidden{display:none}.modalbox{background:#fff;border-radius:16px;padding:20px;width:min(950px,100%);max-height:90vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.close{border:0;background:#f2f4f7;border-radius:8px;padding:7px 10px;cursor:pointer}.kpi-green{color:#067647}.kpi-red{color:#b42318}.kpi-blue{color:#175cd3}.muted{color:var(--muted)}.notice{padding:12px;background:#eef7ff;border:1px solid #b2ddff;border-radius:10px;font-size:11px}.footer{font-size:10px;color:var(--muted);margin-top:14px;text-align:center}
+@media(max-width:1150px){.cards{grid-template-columns:repeat(3,1fr)}.grid3{grid-template-columns:1fr 1fr}}@media(max-width:800px){.side{display:none}.main{margin:0;padding:12px}.cards{grid-template-columns:repeat(2,1fr)}.grid,.grid3{grid-template-columns:1fr}.top{align-items:flex-start}.top h1{font-size:19px}.actions{flex-wrap:wrap}.user-pill{display:none}}
+@media print{.side,.top,.btn,.toolbar{display:none!important}.main{margin:0!important;padding:0!important}.panel,.card{border:0!important}.table th{position:static!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const SUPABASE_URL='https://vgstkvshalbywbposzzl.supabase.co';
+const SUPABASE_KEY='sb_publishable_kpEPqbZEuVY4DukfDE0jWg_mTqtIFpa';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let ctx=null, dash=null, currentPage='dashboard';
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const money=v=>Number(v||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2})+' ج.م';
+const date=v=>v?new Date(v).toLocaleDateString('ar-EG'):'-';
+const val=(o,...ks)=>{for(const k of ks){if(o&&o[k]!==undefined&&o[k]!==null)return o[k]}return null};
+async function rpc(name,args={}){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
+function toast(msg,ok=false){const x=document.createElement('div');x.style='position:fixed;bottom:18px;left:18px;z-index:100;background:'+(ok?'#067647':'#b42318')+';color:#fff;padding:12px 16px;border-radius:10px;font-size:12px;box-shadow:0 8px 30px #0003';x.textContent=msg;document.body.appendChild(x);setTimeout(()=>x.remove(),3500)}
+function renderLogin(){
+ document.body.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h1 style="margin:0 0 5px">PLP Cloud</h1><div class="muted" style="font-size:12px">Phone LCD Parts ERP System</div><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div><div id="loginmsg" class="loginmsg"></div><button class="btn primary" style="width:100%" onclick="login()">دخول للنظام</button><div class="footer">Arabic RTL • English LTR • Supabase secured backend</div></div></div>';
+}
+async function login(){
+ const e=document.getElementById('email').value.trim(),p=document.getElementById('password').value;
+ const m=document.getElementById('loginmsg');m.textContent='جارٍ تسجيل الدخول...';
+ const {error}=await sb.auth.signInWithPassword({email:e,password:p});
+ if(error){m.textContent=error.message;return}
+ await boot();
+}
+async function logout(){await sb.auth.signOut();ctx=null;dash=null;renderLogin()}
+async function boot(){
+ const {data:{session}}=await sb.auth.getSession();
+ if(!session){renderLogin();return}
+ try{
+   ctx=await rpc('get_my_context');
+   if(!ctx){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>لا توجد شركة مرتبطة</h2><p class="muted">حسابك يحتاج أن يكون عضوًا في شركة PLP.</p><button class="btn" onclick="logout()">تسجيل الخروج</button></div></div>';return}
+   dash=await rpc('get_dashboard_context',{p_company_id:ctx.company_id});
+   renderShell();showPage('dashboard');
+ }catch(e){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>تعذر تحميل النظام</h2><p>'+esc(e.message)+'</p><button class="btn" onclick="logout()">خروج</button></div></div>'}
+}
+function renderShell(){
+ document.body.innerHTML='<aside class="side"><div class="brand"><div class="logo">PLP</div><div><b>PLP Cloud</b><small>Phone LCD Parts ERP</small></div></div><div class="nav">'+nav('dashboard','📊','الرئيسية')+nav('sales','🧾','المبيعات')+nav('purchases','🛒','المشتريات والاستيراد')+nav('inventory','📦','المخزون')+nav('treasury','💰','الخزينة والبنوك')+nav('customers','👥','العملاء والموردين')+nav('employees','🧑‍💼','الموظفون والمرتبات')+nav('assets','🏢','الأصول الثابتة')+nav('accounting','📚','المحاسبة')+nav('reports','📈','التقارير')+nav('settings','⚙️','الإعدادات')+'</div></aside><main class="main"><div id="page"></div></main><div id="modal" class="modal hidden"></div>';
+}
+function nav(id,ico,label){return '<button id="nav-'+id+'" onclick="showPage(\''+id+'\')"><span class="ico">'+ico+'</span>'+label+'</button>'}
+function header(title,sub){return '<div class="top"><div><h1>'+title+'</h1><p>'+sub+'</p></div><div class="actions"><div class="user-pill">'+esc(ctx.full_name||ctx.email||'مستخدم')+'</div><button class="btn" onclick="refresh()">↻ تحديث</button><button class="btn danger" onclick="logout()">خروج</button></div></div>'}
+function showPage(p){
+ currentPage=p;document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));document.getElementById('nav-'+p)?.classList.add('active');
+ const pages={dashboard:pageDashboard,sales:pageSales,purchases:pagePurchases,inventory:pageInventory,treasury:pageTreasury,customers:pageCustomers,employees:pageEmployees,assets:pageAssets,accounting:pageAccounting,reports:pageReports,settings:pageSettings};
+ (pages[p]||pageDashboard)();
+}
+async function refresh(){try{dash=await rpc('get_dashboard_context',{p_company_id:ctx.company_id});showPage(currentPage);toast('تم تحديث البيانات',true)}catch(e){toast(e.message)}}
+function pageDashboard(){
+ const d=dash?.dashboard||dash?.summary||dash||{};
+ const cc=dash?.control_center||{};
+ document.getElementById('page').innerHTML=header('لوحة التحكم','نظرة سريعة على PLP Cloud والعمليات المالية والمخزنية')+
+ '<div class="cards">'+card('مبيعات اليوم',money(val(d,'sales_today','salesToday')),'🧾')+card('مشتريات اليوم',money(val(d,'purchases_today','purchasesToday')),'🛒')+card('ذمم العملاء',money(val(d,'customer_receivables','customerReceivables')),'👥')+card('ذمم الموردين',money(val(d,'supplier_payables','supplierPayables')),'🏭')+card('قيمة المخزون',money(val(d,'inventory_value','inventoryValue')),'📦')+card('إجمالي السيولة',money(val(d,'total_liquidity','totalLiquidity')),'💰')+'</div>'+
+ '<div class="grid"><div class="panel"><h3 style="margin-top:0">الخزينة والسيولة</h3><div class="grid3" style="margin-top:0">'+mini('نقدية',money(val(d,'cash')),'kpi-green')+mini('بنوك',money(val(d,'banks')),'kpi-blue')+mini('محافظ',money(val(d,'wallets')),'kpi-blue')+'</div><div class="notice" style="margin-top:12px">الرصيد هنا مبني على دفتر الخزينة المرتبط بالحسابات المحاسبية، وليس مجرد جمع فواتير المبيعات.</div></div>'+
+ '<div class="panel"><h3 style="margin-top:0">تنبيهات</h3><div id="alerts">'+alerts(dash?.alerts)+'</div></div></div>'+
+ '<div class="grid"><div class="panel"><h3 style="margin-top:0">مركز الرقابة المالية</h3>'+control(cc)+'</div><div class="panel"><h3 style="margin-top:0">حالة النظام</h3><p class="status"><span class="tag ok">Supabase متصل</span></p><p class="muted" style="font-size:11px">الشركة: '+esc(ctx.company_name||'PLP')+'</p><p class="muted" style="font-size:11px">آخر تحديث: '+new Date().toLocaleString('ar-EG')+'</p></div></div>';
+}
+function card(l,v,i){return '<div class="card"><div class="metric"><div><div class="label">'+l+'</div><div class="num">'+v+'</div></div><div class="circle">'+i+'</div></div></div>'}
+function mini(l,v,c){return '<div class="card"><div class="label">'+l+'</div><div class="num '+c+'">'+v+'</div></div>'}
+function alerts(a){if(!a)return '<div class="empty">لا توجد تنبيهات ظاهرة.</div>';if(!Array.isArray(a))return '<div class="alert">'+esc(JSON.stringify(a))+'</div>';return a.slice(0,8).map(x=>'<div class="alert '+(x.severity==='ok'?'ok':'')+'">'+esc(x.title||x.message||JSON.stringify(x))+'</div>').join('')||'<div class="empty">لا توجد تنبيهات.</div>'}
+function control(c){if(!c||typeof c!=='object')return '<div class="empty">لا توجد بيانات رقابة حالياً.</div>';const rows=[];for(const [k,v] of Object.entries(c)){if(typeof v==='object'&&v!==null){rows.push('<tr><td>'+esc(k)+'</td><td>'+esc(v.balanced===false?'غير متوازن':'سليم')+'</td></tr>')}}return rows.length?'<div class="tablewrap"><table class="table"><thead><tr><th>البند</th><th>الحالة</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></div>':'<div class="notice">مركز الرقابة جاهز للاستخدام.</div>'}
+function simplePage(title,sub,body){document.getElementById('page').innerHTML=header(title,sub)+body}
+function pageSales(){simplePage('المبيعات','الفواتير والطلبات والمرتجعات والتحصيل','<div class="grid3">'+moduleCard('عروض الأسعار','إنشاء ومتابعة عروض العملاء','quotation')+moduleCard('أوامر البيع','طلب → فاتورة','sales_order')+moduleCard('فواتير البيع','بيع نقدي أو آجل + COGS','sales_invoice')+moduleCard('مرتجعات البيع','مرتجع كامل أو جزئي','sales_return')+moduleCard('تحصيل العملاء','توزيع التحصيل على الفواتير','receipt')+moduleCard('كشف حساب العميل','أرصدة وأعمار الديون','customer_statement')+'</div>')}
+function pagePurchases(){simplePage('المشتريات والاستيراد','دورة الشراء من الطلب حتى التكلفة الفعلية','<div class="grid3">'+moduleCard('طلبات الشراء','Purchase Requests','purchase_request')+moduleCard('أوامر الشراء','PO → Invoice','purchase_order')+moduleCard('فواتير الشراء','عملات وموردين','purchase_invoice')+moduleCard('شحنات الاستيراد','دبي / الصين / غيرها','import_shipment')+moduleCard('Landed Cost','شحن + جمارك + تخليص + مصاريف','landed_cost')+moduleCard('مدفوعات الموردين','توزيع الدفعات على الفواتير','supplier_payment')+'</div>')}
+function pageInventory(){simplePage('المخزون','الأصناف والمخازن والحركات والتسويات','<div class="grid3">'+moduleCard('الأصناف والأصناف الفرعية','SKU / Barcode / Quality / Price Lists','products')+moduleCard('أرصدة المخازن','كمية / محجوز / متاح / تكلفة','stock')+moduleCard('تحويلات المخزون','من مخزن إلى مخزن','transfer')+moduleCard('الجرد','فرق جرد + قيد محاسبي','count')+moduleCard('كارت الصنف','كل حركات الصنف','stock_card')+moduleCard('تنبيه حد الطلب','Low Stock','low_stock')+'</div>')}
+function pageTreasury(){simplePage('الخزينة والبنوك','نقدية وبنوك ومحافظ إلكترونية وتسويات','<div class="grid3">'+moduleCard('الخزينة','Opening / Receipt / Payment','cash')+moduleCard('البنوك','حسابات البنوك والحركة','banks')+moduleCard('Vodafone Cash / InstaPay','محافظ وحسابات رقمية','wallets')+moduleCard('التحويلات الداخلية','بين حسابات الشركة','transfers')+moduleCard('التسوية','Treasury ↔ GL','reconcile')+moduleCard('Cash Flow','التدفقات النقدية','cashflow')+'</div>')}
+function pageCustomers(){simplePage('العملاء والموردين','البيانات الرئيسية والأرصدة وكشوف الحساب','<div class="grid3">'+moduleCard('العملاء','Credit Limit / Price List','customers')+moduleCard('الموردون','محلي / خارجي / عملة','suppliers')+moduleCard('أعمار العملاء','Invoice-level Aging','customer_aging')+moduleCard('أعمار الموردين','Invoice-level Aging','supplier_aging')+moduleCard('كشف حساب العميل','Posted AR movements','customer_statement')+moduleCard('كشف حساب المورد','Posted AP movements','supplier_statement')+'</div>')}
+function pageEmployees(){simplePage('الموظفون والمرتبات','الموظفون والعمولات والسلف والمرتبات','<div class="grid3">'+moduleCard('الموظفون','بيانات الموظفين والصلاحيات','employees')+moduleCard('المرتبات','Payroll Runs','payroll')+moduleCard('السلف','Employee Advances','advances')+moduleCard('العمولات','Sales Commission','commission')+moduleCard('تقرير المرتبات','Payroll Summary','payroll_report')+'</div>')}
+function pageAssets(){simplePage('الأصول الثابتة','شراء الأصل والإهلاك والتصرف','<div class="grid3">'+moduleCard('سجل الأصول','Asset Register','asset_register')+moduleCard('فئات الأصول','Categories & Accounts','asset_categories')+moduleCard('الإهلاك','Monthly Depreciation','depreciation')+moduleCard('بيع / استبعاد أصل','Disposal / Gain Loss','asset_disposal')+'</div>')}
+function pageAccounting(){simplePage('المحاسبة','دفتر الأستاذ والفترات والأرصدة الافتتاحية','<div class="grid3">'+moduleCard('دليل الحسابات','Chart of Accounts','coa')+moduleCard('قيود اليومية','Journal Entries','journals')+moduleCard('ميزان المراجعة','Trial Balance','trial')+moduleCard('الأرباح والخسائر','P&L','pl')+moduleCard('الميزانية','Balance Sheet','bs')+moduleCard('الأرصدة الافتتاحية','Opening Balances','opening')+moduleCard('الفترات المالية','Close / Reopen','periods')+moduleCard('الشركاء','Restricted Partner Settlement','partners')+'</div>')}
+function pageReports(){simplePage('التقارير','التقارير التشغيلية والمالية','<div class="grid3">'+moduleCard('مركز الرقابة المالية','Trial Balance + Subledgers','control')+moduleCard('المبيعات','By Customer / Product / Salesperson','sales_report')+moduleCard('المشتريات','By Supplier / Currency','purchase_report')+moduleCard('المخزون','Valuation / Low Stock / Reconciliation','inventory_report')+moduleCard('الخزينة','Cash / Bank / Wallet statements','treasury_report')+moduleCard('التدفقات النقدية','Cash Flow','cashflow')+'</div>')}
+function pageSettings(){simplePage('الإعدادات','إعدادات الشركة والطباعة والحساب','<div class="grid3">'+moduleCard('بيانات الشركة','Print Header / Contact','company_settings')+moduleCard('قوالب الطباعة','A4 / A5 / Thermal','print_templates')+moduleCard('المستخدمون والأدوار','Users / Roles / Permissions','users')+moduleCard('سجل التدقيق','Audit Center','audit')+'</div>')}
+function moduleCard(t,d,key){return '<div class="card"><div class="metric"><div><h3 style="margin:0 0 6px;font-size:15px">'+t+'</h3><div class="muted" style="font-size:11px">'+d+'</div></div><div class="circle">›</div></div><button class="btn" style="margin-top:13px" onclick="openModule(\''+key+'\')">فتح</button></div>'}
+async function openModule(key){
+ try{
+  if(key==='asset_register'){const rows=await rpc('get_fixed_asset_register',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return tableModal('سجل الأصول',rows)}
+  if(key==='payroll_report'){const x=await rpc('get_payroll_summary',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return objectModal('ملخص المرتبات',x)}
+  if(key==='control'){const x=await rpc('get_financial_control_summary',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return objectModal('مركز الرقابة المالية',x)}
+  if(key==='periods'){const x=await rpc('get_period_control_dashboard',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return objectModal('لوحة التحكم في الفترة المالية',x)}
+  if(key==='inventory_report'){const x=await rpc('get_inventory_reconciliation_summary',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return objectModal('تسوية المخزون',x)}
+  if(key==='customer_aging'){const x=await rpc('get_customer_aging',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return tableModal('أعمار العملاء',x)}
+  if(key==='supplier_aging'){const x=await rpc('get_supplier_aging',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return tableModal('أعمار الموردين',x)}
+  if(key==='cashflow'){const x=await rpc('get_cash_flow',{p_company_id:ctx.company_id,p_from:new Date(new Date().getFullYear(),0,1).toISOString().slice(0,10),p_to:new Date().toISOString().slice(0,10)});return objectModal('التدفقات النقدية',x)}
+  if(key==='treasury_report'){const x=await rpc('get_treasury_reconciliation_summary',{p_company_id:ctx.company_id,p_as_of:new Date().toISOString().slice(0,10)});return objectModal('تسوية الخزينة',x)}
+  if(key==='stock'){const x=await rpc('get_product_stock_summary',{p_company_id:ctx.company_id});return tableModal('ملخص مخزون الأصناف',x)}
+  if(key==='low_stock'){const x=await rpc('get_inventory_low_stock_report',{p_company_id:ctx.company_id});return tableModal('الأصناف منخفضة المخزون',x)}
+  if(key==='stock_card'){const id=prompt('أدخل Variant ID:');if(!id)return;const x=await rpc('get_inventory_stock_card',{p_company_id:ctx.company_id,p_variant_id:id,p_from:'2000-01-01',p_to:new Date().toISOString().slice(0,10)});return tableModal('كارت الصنف',x)}
+  if(key==='products'){return noticeModal('الأصناف','واجهة إدارة المنتجات والـvariants مرتبطة بدوال PLP مثل save_product وsave_product_variant. سنكمل شاشة الإدخال التفصيلية فوق هذا الأساس.')}
+  return noticeModal('وحدة PLP Cloud', 'الوحدة '+key+' جاهزة كقسم في الواجهة، وربط عمليات الإدخال التفصيلية سيتم من نفس وظائف Supabase الآمنة الموجودة في النظام.');
+ }catch(e){toast(e.message)}
+}
+function closeModal(){document.getElementById('modal').classList.add('hidden')}
+function noticeModal(t,b){document.getElementById('modal').innerHTML='<div class="modalbox"><div class="modalhead"><h2>'+t+'</h2><button class="close" onclick="closeModal()">إغلاق</button></div><div class="notice">'+esc(b)+'</div></div>';document.getElementById('modal').classList.remove('hidden')}
+function objectModal(t,x){let body='<pre style="white-space:pre-wrap;font-size:11px;background:#f8fafc;padding:12px;border-radius:10px;direction:ltr;text-align:left">'+esc(JSON.stringify(x,null,2))+'</pre>';document.getElementById('modal').innerHTML='<div class="modalbox"><div class="modalhead"><h2>'+t+'</h2><button class="close" onclick="closeModal()">إغلاق</button></div>'+body+'</div>';document.getElementById('modal').classList.remove('hidden')}
+function tableModal(t,rows){rows=Array.isArray(rows)?rows:(rows?.data||[]);if(!rows.length)return noticeModal(t,'لا توجد بيانات.');const cols=Object.keys(rows[0]);let h='<div class="tablewrap"><table class="table"><thead><tr>'+cols.map(c=>'<th>'+esc(c)+'</th>').join('')+'</tr></thead><tbody>'+rows.slice(0,300).map(r=>'<tr>'+cols.map(c=>'<td>'+esc(typeof r[c]==='object'?JSON.stringify(r[c]):r[c])+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';document.getElementById('modal').innerHTML='<div class="modalbox"><div class="modalhead"><h2>'+t+'</h2><button class="close" onclick="closeModal()">إغلاق</button></div>'+h+'</div>';document.getElementById('modal').classList.remove('hidden')}
+sb.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT')renderLogin()});
+boot();
+</script>
+</body>
+</html>
