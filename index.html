@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20261004-2255">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=20261004-2255">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20261004-2255">
-<link rel="manifest" href="manifest.webmanifest?v=20261004-2255">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20261004-2315">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=20261004-2315">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20261004-2315">
+<link rel="manifest" href="manifest.webmanifest?v=20261004-2315">
 <meta name="theme-color" content="#0b1f3a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -40,15 +40,33 @@ function renderLogin(){
 }
 async function login(){
  const e=document.getElementById('email').value.trim(),p=document.getElementById('password').value;
- const m=document.getElementById('loginmsg');m.textContent='جارٍ تسجيل الدخول...';
- const {error}=await sb.auth.signInWithPassword({email:e,password:p});
- if(error){m.textContent=error.message;return}
- await boot();
+ const m=document.getElementById('loginmsg');
+ if(!e||!p){m.textContent='من فضلك أدخل البريد الإلكتروني وكلمة المرور';return}
+ m.textContent='جارٍ تسجيل الدخول...';
+ try{
+   const authCall=sb.auth.signInWithPassword({email:e,password:p});
+   const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('انتهت مهلة تسجيل الدخول. تحقق من الاتصال ثم حاول مرة أخرى.')),15000));
+   const result=await Promise.race([authCall,timer]);
+   if(result.error){m.textContent=result.error.message;return}
+   await boot();
+ }catch(err){m.textContent=err?.message||'تعذر تسجيل الدخول';}
 }
 async function logout(){await sb.auth.signOut();ctx=null;dash=null;companyId=null;renderLogin()}
 function getCompanyId(){return companyId || ctx?.company?.id || ctx?.company_id || null}
 async function boot(){
- const {data:{session}}=await sb.auth.getSession();
+ let session=null;
+ try{
+   const sessionCall=sb.auth.getSession();
+   const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('انتهت مهلة الاتصال بخدمة المصادقة.')),10000));
+   const result=await Promise.race([sessionCall,timer]);
+   if(result.error)throw result.error;
+   session=result.data?.session||null;
+ }catch(e){
+   const m=document.getElementById('loginmsg');
+   if(m)m.textContent=e?.message||'تعذر التحقق من جلسة الدخول';
+   else renderLogin();
+   return;
+ }
  if(!session){renderLogin();return}
  try{
    dash=await rpc('get_dashboard_context',{});
