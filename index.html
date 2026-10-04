@@ -33,7 +33,7 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&
 const money=v=>Number(v||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2})+' ج.م';
 const date=v=>v?new Date(v).toLocaleDateString('ar-EG'):'-';
 const val=(o,...ks)=>{for(const k of ks){if(o&&o[k]!==undefined&&o[k]!==null)return o[k]}return null};
-async function rpc(name,args={}){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
+async function rpc(name,args={},timeoutMs=15000){const call=sb.rpc(name,args);const timer=new Promise((_,reject)=>setTimeout(()=>reject(new Error('انتهت مهلة الاتصال بالخادم')),timeoutMs));const {data,error}=await Promise.race([call,timer]);if(error)throw error;return data}
 function toast(msg,ok=false){const x=document.createElement('div');x.style='position:fixed;bottom:18px;left:18px;z-index:100;background:'+(ok?'#067647':'#b42318')+';color:#fff;padding:12px 16px;border-radius:10px;font-size:12px;box-shadow:0 8px 30px #0003';x.textContent=msg;document.body.appendChild(x);setTimeout(()=>x.remove(),3500)}
 function renderLogin(){
  document.body.innerHTML='<div class="login"><div class="loginbox"><div class="loginlogo">PLP</div><h1 style="margin:0 0 5px">PLP Cloud</h1><div class="muted" style="font-size:12px">Phone LCD Parts ERP System</div><div class="field"><label>البريد الإلكتروني</label><input id="email" type="email" autocomplete="email"></div><div class="field"><label>كلمة المرور</label><input id="password" type="password" autocomplete="current-password"></div><div id="loginmsg" class="loginmsg"></div><button class="btn primary" style="width:100%" onclick="login()">دخول للنظام</button><div class="footer">Arabic RTL • English LTR • Supabase secured backend</div></div></div>';
@@ -51,12 +51,12 @@ async function boot(){
  const {data:{session}}=await sb.auth.getSession();
  if(!session){renderLogin();return}
  try{
-   ctx=await rpc('get_my_context');
-   companyId=getCompanyId();
-   if(!ctx || !companyId){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>لا توجد شركة مرتبطة</h2><p class="muted">حسابك يحتاج أن يكون عضوًا في شركة PLP.</p><button class="btn" onclick="logout()">تسجيل الخروج</button></div></div>';return}
-   dash=await rpc('get_dashboard_context',{p_company_id:companyId});
+   dash=await rpc('get_dashboard_context',{});
+   if(!dash || !dash.has_company || !dash.company_id){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>لا توجد شركة مرتبطة</h2><p class="muted">حسابك يحتاج أن يكون عضوًا في شركة PLP.</p><button class="btn" onclick="logout()">تسجيل الخروج</button></div></div>';return}
+   companyId=dash.company_id;
+   ctx={user_id:dash.user_id,company_id:companyId,email:session.user?.email||'',full_name:session.user?.user_metadata?.full_name||session.user?.email||'مستخدم',company:{id:companyId}};
    renderShell();showPage('dashboard');
- }catch(e){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>تعذر تحميل النظام</h2><p>'+esc(e.message)+'</p><button class="btn" onclick="logout()">خروج</button></div></div>'}
+ }catch(e){document.getElementById('app').innerHTML='<div class="login"><div class="loginbox"><h2>تعذر تحميل النظام</h2><p>'+esc(e.message)+'</p><button class="btn" onclick="boot()">إعادة المحاولة</button><button class="btn" onclick="logout()">خروج</button></div></div>'}
 }
 function renderShell(){
  document.body.innerHTML='<aside class="side"><div class="brand"><div class="logo">PLP</div><div><b>PLP Cloud</b><small>Phone LCD Parts ERP</small></div></div><div class="nav">'+nav('dashboard','📊','الرئيسية')+nav('sales','🧾','المبيعات')+nav('purchases','🛒','المشتريات والاستيراد')+nav('inventory','📦','المخزون')+nav('treasury','💰','الخزينة والبنوك')+nav('customers','👥','العملاء والموردين')+nav('employees','🧑‍💼','الموظفون والمرتبات')+nav('assets','🏢','الأصول الثابتة')+nav('accounting','📚','المحاسبة')+nav('reports','📈','التقارير')+nav('settings','⚙️','الإعدادات')+'</div></aside><main class="main"><div id="page"></div></main><div id="modal" class="modal hidden"></div>';
